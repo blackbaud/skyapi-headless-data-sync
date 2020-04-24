@@ -2,7 +2,7 @@
 
 This repository contains the code for a headless app to demonstrate how to synchronize data with Blackbaud records using [.NET Core](https://www.microsoft.com/net/core/platform).
 
-This SKY API application fetches modified records using a `last_modified` date or `sort_token` parameter.  Records returned from this query should be synchronized to a custom data source.
+This SKY API application fetches modified records using a `last_modified` date or `sort_token` parameter at a 1-minute interval.  Records returned from this query should be synchronized to a custom data source.
 
 The app also creates a local JSON file to store OAuth tokens and query parameters to be used for subsequent SKY API requests. You may choose an alternate approach of how to store this information in a production application.
 
