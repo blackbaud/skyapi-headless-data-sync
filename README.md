@@ -45,7 +45,11 @@ export BBHeadlessDataSync_AppSettings__SkyApiSubscriptionKey=YOUR_SKYAPI_KEY
 - Obtain intial refresh token by authorizing your app using the [OAuth 2.0 Authorization Code Flow](https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow).
   - You may develop your own utility app, or use an existing utility, such as [Postman](https://www.postman.com), to get a new OAuth 2.0 access/refresh token.
   - There are also [SKY API Auth Code Flow tutorials](https://developer.blackbaud.com/skyapi/docs/authorization/auth-code-flow/code-samples) available that can walk you through the process of aquiring a access/refresh token.
-- Compile and run the console app, providing the refresh token as an argument
+- For the first time, run the console app providing the refresh token as an argument
 ```
 dotnet run --refreshtoken <refreshtoken>
+```
+- The initial refresh token is exchanged for a new access token and refresh token, so it can be discarded. There is no need to provide a refresh token as an argument for subsequent sessions
+```
+dotnet run
 ```
