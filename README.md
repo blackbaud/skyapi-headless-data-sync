@@ -53,3 +53,10 @@ dotnet run --refreshtoken <refreshtoken>
 ```
 dotnet run
 ```
+
+### Extend app capabilities:
+Currently the app demonstrates how to query for modified constituent records using SKY API.  To extend the app to provide more sync capability:
+- Add a new interface method to [IDataSyncService](https://github.com/blackbaud/skyapi-headless-data-sync/blob/master/Services/DataSync/IDataSyncService.cs) - ie. `Task<bool> SyncGiftData();`
+- Add a new partial `DataSyncService` class, ie `DataSyncService.Gift.cs`, and implementation for querying an additional API for modified records.
+
+You can implement and hook up your own custom data source for synchronization by updating the [UpdateConstituentData](https://github.com/blackbaud/skyapi-headless-data-sync/blob/master/Services/DataSync/DataSyncService.Constituent.cs) function to parse the provided `JObject` which contains modified constituents.
