@@ -13,7 +13,7 @@ namespace Blackbaud.HeadlessDataSync.Services.DataSync
         /// <summary>
         /// Syncs with Blackbaud constituent data.
         /// </summary>
-        public async Task<bool> SyncConstituentData()
+        public async Task<bool> SyncConstituentDataAsync()
         {
             _lastConstituentSyncDate = DateTimeOffset.Now;
             _dataStorageService.SetLastSyncDate(_lastConstituentSyncDate);

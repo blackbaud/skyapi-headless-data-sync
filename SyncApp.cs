@@ -102,7 +102,7 @@ namespace Blackbaud.HeadlessDataSync
         {
             var tasks = new List<Task<bool>>
             {
-                _dataSyncService.SyncConstituentData()
+                _dataSyncService.SyncConstituentDataAsync()
                 // additional sync processes...
             };
 

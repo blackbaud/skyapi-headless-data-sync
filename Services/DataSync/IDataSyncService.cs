@@ -4,7 +4,7 @@ namespace Blackbaud.HeadlessDataSync.Services.DataSync
 {
     public interface IDataSyncService
     {
-        Task<bool> SyncConstituentData();
+        Task<bool> SyncConstituentDataAsync();
 
         // additional sync processes...
     }
