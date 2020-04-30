@@ -139,24 +139,25 @@ namespace Blackbaud.HeadlessDataSync.Services
 
         private void ReadStorageData()
         {
-            using var fileStream = File.Open(STORAGE_DATA_FILE_NAME, FileMode.OpenOrCreate, FileAccess.Read);
-            using StreamReader reader = new StreamReader(fileStream);
-            _storageData = JsonConvert.DeserializeObject<StorageData>(reader.ReadToEnd(),
-                new JsonSerializerSettings
-                {
-                });
-
-            if (_storageData == null)
+            using (var fileStream = File.Open(STORAGE_DATA_FILE_NAME, FileMode.OpenOrCreate, FileAccess.Read))
+            using (StreamReader reader = new StreamReader(fileStream))
             {
-                _storageData = new StorageData();
+                _storageData = JsonConvert.DeserializeObject<StorageData>(reader.ReadToEnd());
+
+                if (_storageData == null)
+                {
+                    _storageData = new StorageData();
+                }
             }
         }
         
-        private async void WriteStorageData()
+        private void WriteStorageData()
         {
-            using var fileStream = File.Open(STORAGE_DATA_FILE_NAME, FileMode.OpenOrCreate, FileAccess.Write);
-            using StreamWriter writer = new StreamWriter(fileStream);
-            await writer.WriteAsync(JsonConvert.SerializeObject(_storageData, Formatting.Indented));
+            using (var fileStream = File.Open(STORAGE_DATA_FILE_NAME, FileMode.OpenOrCreate, FileAccess.Write))
+            using (StreamWriter writer = new StreamWriter(fileStream))
+            {
+                writer.Write(JsonConvert.SerializeObject(_storageData, Formatting.Indented));
+            }
         }
     }
 }
