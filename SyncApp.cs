@@ -1,9 +1,9 @@
 ﻿using Blackbaud.HeadlessDataSync.Services;
 using Blackbaud.HeadlessDataSync.Services.DataSync;
-using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +19,6 @@ namespace Blackbaud.HeadlessDataSync
         private ILogger<SyncApp> Logger { get; }
         private readonly IDataSyncService _dataSyncService;
         private readonly IDataStorageService _dataStorageService;
-        private readonly CommandLineApplication _commandLineApplication;
 
         /// <summary>
         /// Constructs an instance of SyncApp.
@@ -32,7 +31,6 @@ namespace Blackbaud.HeadlessDataSync
             Logger = logger;
             _dataSyncService = dataSyncService;
             _dataStorageService = dataStorageService;
-            _commandLineApplication = new CommandLineApplication(throwOnUnexpectedArg: false);
         }
 
         /// <summary>
@@ -40,20 +38,21 @@ namespace Blackbaud.HeadlessDataSync
         /// </summary>
         public void Run(string[] args)
         {
-            CommandOption refreshToken = _commandLineApplication.Option(
-              "-r | --refreshtoken <refreshtoken>",
-              "The refresh token obtained from initial authorization.",
-              CommandOptionType.SingleValue);
+            var refreshTokenOption = new Option<string>
+                (new[] { "-r", "--refreshtoken" }, "The refresh token obtained from initial authorization.");
 
-            _commandLineApplication.HelpOption("-? | -h | --help");
-
-            _commandLineApplication.OnExecute(() =>
+            var command = new RootCommand
             {
-                SyncData(refreshToken.Value());
-                return 0;
-            });
+                refreshTokenOption
+            };
 
-            _commandLineApplication.Execute(args);
+            command.SetHandler((refreshToken) =>
+            {
+                SyncData(refreshToken?.ToString());
+            },
+            refreshTokenOption);
+
+            command.Invoke(args);
         }
 
         /// <summary>

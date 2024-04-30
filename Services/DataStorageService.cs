@@ -1,10 +1,10 @@
+using Blackbaud.HeadlessDataSync.Models;
+using Microsoft.AspNetCore.DataProtection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using Blackbaud.HeadlessDataSync.Models;
-using Microsoft.AspNetCore.DataProtection;
-using Newtonsoft.Json;
 
 namespace Blackbaud.HeadlessDataSync.Services
 {

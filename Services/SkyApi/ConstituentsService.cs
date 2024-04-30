@@ -1,9 +1,9 @@
+using Blackbaud.HeadlessDataSync.Models;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web;
-using Blackbaud.HeadlessDataSync.Models;
-using Microsoft.Extensions.Options;
 
 namespace Blackbaud.HeadlessDataSync.Services.SkyApi
 {
