@@ -8,7 +8,7 @@ The app also creates a local JSON file to store OAuth tokens and query parameter
 
 In the event of token expiration (currently, OAuth access tokens expire in 60 minutes), the application handles a `401 - Unauthorized` error from SKY API by using the stored refresh token to acquire a new access token. To automatically refresh without any UI interaction necessary, a new refresh token is also returned and stored for use later.
 
-For more information, see the [Synchronize Data to a Custom Data Source with SKY API](https://developer.blackbaud.com/skyapi/docs/resources/in-depth-topics/synchronize-data) in-depth topic.
+For more information, see the [Synchronize Data to a Custom Data Source with SKY API](https://developer.blackbaud.com/skyapi/docs/in-depth-topics/synchronize-data) in-depth topic.
 
 ## Run locally
 
