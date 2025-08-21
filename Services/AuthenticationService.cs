@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Blackbaud.HeadlessDataSync.Services
 {
@@ -31,7 +32,7 @@ namespace Blackbaud.HeadlessDataSync.Services
         /// </summary>
         /// <param name="requestBody">Key-value attributes to be sent with the request.</param>
         /// <returns>The response from the provider.</returns>
-        private HttpResponseMessage FetchTokens(Dictionary<string, string> requestBody) 
+        private async Task<HttpResponseMessage> FetchTokensAsync(Dictionary<string, string> requestBody) 
         {
             using (HttpClient client = new HttpClient()) 
             {   
@@ -48,10 +49,10 @@ namespace Blackbaud.HeadlessDataSync.Services
                     "Authorization", "Basic " + Base64Encode(_appSettings.Value.AuthClientId + ":" + _appSettings.Value.AuthClientSecret));
                 
                 // Fetch tokens from auth server.
-                HttpResponseMessage response = client.PostAsync(url, new FormUrlEncodedContent(requestBody)).Result;
+                HttpResponseMessage response = await client.PostAsync(url, new FormUrlEncodedContent(requestBody));
 
                 // Save the access/refresh tokens in the Session.
-                _dataStorageService.SetTokensFromResponse(response);
+                await _dataStorageService.SetTokensFromResponseAsync(response);
                 
                 return response;
             }
@@ -60,9 +61,9 @@ namespace Blackbaud.HeadlessDataSync.Services
         /// <summary>
         /// Refreshes the expired access token (from the stored refresh token).
         /// </summary>
-        public HttpResponseMessage RefreshAccessToken()
+        public async Task<HttpResponseMessage> RefreshAccessTokenAsync()
         {
-            return FetchTokens(new Dictionary<string, string>(){
+            return await FetchTokensAsync(new Dictionary<string, string>(){
                 { "grant_type", "refresh_token" },
                 { "refresh_token", _dataStorageService.GetRefreshToken() }
             });

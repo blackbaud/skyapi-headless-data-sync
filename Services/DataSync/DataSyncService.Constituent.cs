@@ -31,7 +31,7 @@ namespace Blackbaud.HeadlessDataSync.Services.DataSync
 
             try
             {
-                var response = _constituentService.GetConstituents(queryParams);
+                var response = await _constituentService.GetConstituentsAsync(queryParams);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseData = await response.Content.ReadAsStringAsync();
