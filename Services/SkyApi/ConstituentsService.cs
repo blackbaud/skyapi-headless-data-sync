@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Blackbaud.HeadlessDataSync.Services.SkyApi
@@ -33,9 +35,9 @@ namespace Blackbaud.HeadlessDataSync.Services.SkyApi
         /// <summary>
         /// Requests the auth service to refresh the access token and returns true if successful.
         /// </summary>
-        private bool TryRefreshToken()
+        private async Task<bool> TryRefreshTokenAsync(CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage tokenResponse = _authService.RefreshAccessToken();
+            HttpResponseMessage tokenResponse = await _authService.RefreshAccessTokenAsync(cancellationToken);
             return (tokenResponse.IsSuccessStatusCode);
         }
 
@@ -46,7 +48,7 @@ namespace Blackbaud.HeadlessDataSync.Services.SkyApi
         /// <param name="method" type="String">The HTTP method, post, get</param>
         /// <param name="endpoint" type="String">The API endpoint</param>
         /// <param name="content" type="HttpContent">The request body content</param>
-        private HttpResponseMessage Proxy(string method, string endpoint, StringContent content = null)
+        private async Task<HttpResponseMessage> ProxyAsync(string method, string endpoint, StringContent content = null, CancellationToken cancellationToken = default)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -65,11 +67,11 @@ namespace Blackbaud.HeadlessDataSync.Services.SkyApi
                 {
                     default:
                     case "get":
-                        response = client.GetAsync(endpoint).Result;
+                        response = await client.GetAsync(endpoint, cancellationToken);
                         break;
 
                     case "post":
-                        response = client.PostAsync(endpoint, content).Result;
+                        response = await client.PostAsync(endpoint, content, cancellationToken);
                         break;
                 }
 
@@ -81,10 +83,10 @@ namespace Blackbaud.HeadlessDataSync.Services.SkyApi
         /// Returns a response containing the added/modified constituents using the provided query params.
         /// </summary>
         /// <param name="queryParams">The query parameters to be sent with the request.</param>
-        public HttpResponseMessage GetConstituents(ListQueryParams queryParams)
+        public async Task<HttpResponseMessage> GetConstituentsAsync(ListQueryParams queryParams, CancellationToken cancellationToken = default)
         {
             var query = BuildQueryString(queryParams);
-            HttpResponseMessage response = Proxy("get", $"constituents?{query}");
+            HttpResponseMessage response = await ProxyAsync("get", $"constituents?{query}", null, cancellationToken);
 
             // Handle bad response.
             if (!response.IsSuccessStatusCode)
@@ -99,10 +101,10 @@ namespace Blackbaud.HeadlessDataSync.Services.SkyApi
 
                     // Token expired/invalid. Refresh the token and try again.
                     case 401:
-                        bool tokenRefreshed = TryRefreshToken();
+                        bool tokenRefreshed = await TryRefreshTokenAsync(cancellationToken);
                         if (tokenRefreshed)
                         {
-                            response = Proxy("get", $"constituents?{query}");
+                            response = await ProxyAsync("get", $"constituents?{query}", null, cancellationToken);
                         }
                         break;
 

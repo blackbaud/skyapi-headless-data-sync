@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blackbaud.HeadlessDataSync.Services.DataSync
@@ -31,10 +32,10 @@ namespace Blackbaud.HeadlessDataSync.Services.DataSync
 
             try
             {
-                var response = _constituentService.GetConstituents(queryParams);
+                var response = await _constituentService.GetConstituentsAsync(queryParams, CancellationToken.None);
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseData = await response.Content.ReadAsStringAsync();
+                    var responseData = await response.Content.ReadAsStringAsync(CancellationToken.None);
                     var json = JObject.Parse(responseData);
 
                     // Parse and store next_link params
