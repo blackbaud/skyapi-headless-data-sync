@@ -1,6 +1,7 @@
 using Blackbaud.HeadlessDataSync.Models;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blackbaud.HeadlessDataSync.Services
@@ -8,7 +9,7 @@ namespace Blackbaud.HeadlessDataSync.Services
     public interface IDataStorageService
     {   
         void SetTokensFromResponse(HttpResponseMessage response);
-        Task SetTokensFromResponseAsync(HttpResponseMessage response);
+        Task SetTokensFromResponseAsync(HttpResponseMessage response, CancellationToken cancellationToken = default);
         void ClearTokens();
         DateTimeOffset GetLastSyncDate();
         void SetLastSyncDate(DateTimeOffset lastSyncDate);

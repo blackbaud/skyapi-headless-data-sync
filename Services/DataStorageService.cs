@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blackbaud.HeadlessDataSync.Services
@@ -141,11 +142,11 @@ namespace Blackbaud.HeadlessDataSync.Services
         /// <summary>
         /// Sets the access and refresh tokens based on an HTTP response asynchronously.
         /// </summary>
-        public async Task SetTokensFromResponseAsync(HttpResponseMessage response)
+        public async Task SetTokensFromResponseAsync(HttpResponseMessage response, CancellationToken cancellationToken = default)
         {
             if (response.IsSuccessStatusCode)
             {
-                string jsonString = await response.Content.ReadAsStringAsync();
+                string jsonString = await response.Content.ReadAsStringAsync(cancellationToken);
                 Dictionary<string, string> attrs = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
                 SetAccessToken(attrs["access_token"]);
                 SetRefreshToken(attrs["refresh_token"]);
