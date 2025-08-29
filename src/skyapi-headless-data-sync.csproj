@@ -24,4 +24,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="skyapi-headless-data-sync.Tests/**" />
+  </ItemGroup>
+
 </Project>
