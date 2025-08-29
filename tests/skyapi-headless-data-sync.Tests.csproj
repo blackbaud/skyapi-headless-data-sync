@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../skyapi-headless-data-sync.csproj" />
+    <ProjectReference Include="../src/skyapi-headless-data-sync.csproj" />
   </ItemGroup>
 
 </Project>
